@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { RecoilRoot, atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Welcome from "./components/Login/Welcome";
+import ToDo from "./components/ToDo/ToDo";
+import Error from "./components/Error/Error";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LoginObserver from "./components/LoginObserver";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RecoilRoot>
+        <LoginObserver />
+        <Router>
+          <Switch>
+            <Route path="/" exact component={Welcome} />
+            <ProtectedRoute path="/todo/:username" component={ToDo} />
+            <ProtectedRoute path="/alttodo" component={ToDo} />
+            <Route component={Error} />
+          </Switch>
+        </Router>
+      </RecoilRoot>
     </div>
   );
 }
