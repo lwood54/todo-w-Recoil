@@ -10,7 +10,6 @@ import { loginState } from "../atoms/userAtoms";
 function ProtectedRoute({ component: Component, ...rest }: any) {
   const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   console.log("loggedIn: ", loggedIn.toString());
-  // return loggedIn ? <Route {...rest} render={Component} /> : <Redirect to={{ pathname: "/alttodo" }} />;
   return (
     <Route
       {...rest}

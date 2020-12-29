@@ -10,7 +10,6 @@ function Login(props: any) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useRecoilState(loginState);
-  // const [loggedIn, setLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState(false);
 
   function handleLoginFieldInput(e: React.ChangeEvent<HTMLInputElement>) {
@@ -33,6 +32,8 @@ function Login(props: any) {
     // hard coded validation
     if (username === "Logan" && password === "password") {
       setLoggedIn(true);
+      // NOTE: if no setTimeout, recoil state is not updated quickly enough
+      // and component will only see previous state
       setTimeout(() => {
         props.history.push(`/todo/${username}`); // to use, import withRouter from 'react-router-dom' and export default withRouter(component)
       }, 0);
