@@ -1,31 +1,12 @@
-import React from "react";
 import { Redirect, Route } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { loginState } from "../atoms/userAtoms";
+import Welcome from "./Login/Welcome";
 
-// interface Props {
-//   path: String;
-//   component: typeof React.Component;
-// }
-function ProtectedRoute({ component: Component, ...rest }: any) {
-  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
+const ProtectedRoute: React.FC<{ path: string; component: React.FC }> = ({ path, component: Component, ...rest }) => {
+  const loggedIn = useRecoilValue(loginState);
   console.log("loggedIn: ", loggedIn.toString());
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        loggedIn ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/",
-            }}
-          />
-        )
-      }
-    />
-  );
-}
+  return loggedIn ? <Route {...rest} path={path} component={Component} /> : <Route path="/" component={Welcome} />;
+};
 
 export default ProtectedRoute;

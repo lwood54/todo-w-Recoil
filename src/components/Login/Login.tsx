@@ -1,20 +1,20 @@
 /**@jsxImportSource @emotion/react */
 import React, { useState } from "react";
+import { History } from "history";
 import { withRouter } from "react-router-dom";
 import { jsx, css } from "@emotion/react";
 import { danger, success } from "./Login.styles";
-import { loginState } from "../../atoms/userAtoms";
+import { loginState, usernameState } from "../../atoms/userAtoms";
 import { useRecoilState } from "recoil";
 
-function Login(props: any) {
-  const [username, setUsername] = useState("");
+const Login: React.FC<{ history: History }> = ({ history }) => {
+  const [username, setUsername] = useRecoilState(usernameState);
   const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   const [loginError, setLoginError] = useState(false);
 
-  function handleLoginFieldInput(e: React.ChangeEvent<HTMLInputElement>) {
-    let name = e.currentTarget.name;
-    let val = e.currentTarget.value;
+  // destructuring currentTarget.name and currentTarget.value and assigning value to val
+  function handleLoginFieldInput({ currentTarget: { name, value: val } }: React.ChangeEvent<HTMLInputElement>) {
     switch (name) {
       case "username":
         setUsername(val);
@@ -32,14 +32,17 @@ function Login(props: any) {
     // hard coded validation
     if (username === "Logan" && password === "password") {
       setLoggedIn(true);
+
       // NOTE: if no setTimeout, recoil state is not updated quickly enough
       // and component will only see previous state
       setTimeout(() => {
-        props.history.push(`/todo/${username}`); // to use, import withRouter from 'react-router-dom' and export default withRouter(component)
+        history.push(`/todo/${username}`); // to use, import withRouter from 'react-router-dom' and export default withRouter(component)
       }, 0);
     } else {
       setLoggedIn(false);
       setLoginError(true);
+      setUsername("");
+      setPassword("");
     }
   }
   return (
@@ -66,6 +69,7 @@ function Login(props: any) {
       </form>
     </div>
   );
-}
+};
 
+// withRouter is required in order to have access to props.history
 export default withRouter(Login);
