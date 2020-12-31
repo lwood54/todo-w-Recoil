@@ -5,7 +5,7 @@ import Welcome from "./components/Login/Welcome";
 import ToDo from "./components/ToDo/ToDo";
 import Error from "./components/Error/Error";
 import ProtectedRoute from "./components/ProtectedRoute";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/UI/NavBar";
 import AnotherComp from "./components/AnotherComp";
 
 function App() {
