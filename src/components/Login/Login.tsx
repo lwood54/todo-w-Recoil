@@ -1,11 +1,12 @@
 /**@jsxImportSource @emotion/react */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { History } from "history";
 import { withRouter } from "react-router-dom";
 // import { jsx, css } from "@emotion/react";
 import { danger, success } from "./Login.styles";
 import { loginState, usernameState } from "../../atoms/userAtoms";
 import { useRecoilState } from "recoil";
+import AuthService from "../Login/AuthService";
 
 const Login: React.FC<{ history: History }> = ({ history }) => {
   const [username, setUsername] = useRecoilState(usernameState);
@@ -31,6 +32,7 @@ const Login: React.FC<{ history: History }> = ({ history }) => {
     e.preventDefault();
     // hard coded validation
     if (username === "Logan" && password === "password") {
+      AuthService.registerSuccessfulLogin(username);
       setLoggedIn(true);
 
       // NOTE: if no setTimeout, recoil state is not updated quickly enough
@@ -47,26 +49,26 @@ const Login: React.FC<{ history: History }> = ({ history }) => {
   }
   return (
     <div>
-      {!loggedIn ? (
+      {!AuthService.isAuthenticated() ? (
         <>
           <h1>Login</h1>
           {loginError && <h3 css={danger}>Invalid Credentials</h3>}
+          <form>
+            <label>
+              <h3>Username</h3>
+              <input type="text" name="username" onChange={handleLoginFieldInput} value={username} placeholder="username" />
+            </label>
+            <label>
+              <h3>Password</h3>
+              <input type="password" name="password" onChange={handleLoginFieldInput} value={password} placeholder="password" />
+            </label>
+            <button onClick={handleLogin}>Login</button>
+            <h3>Logged In: {AuthService.isAuthenticated().toString()}</h3>
+          </form>
         </>
       ) : (
         <h3 css={success}>Successfully Logged In</h3>
       )}
-      <form>
-        <label>
-          <h3>Username</h3>
-          <input type="text" name="username" onChange={handleLoginFieldInput} value={username} placeholder="username" />
-        </label>
-        <label>
-          <h3>Password</h3>
-          <input type="password" name="password" onChange={handleLoginFieldInput} value={password} placeholder="password" />
-        </label>
-        <button onClick={handleLogin}>Login</button>
-        <h3>Logged In: {loggedIn.toString()}</h3>
-      </form>
     </div>
   );
 };

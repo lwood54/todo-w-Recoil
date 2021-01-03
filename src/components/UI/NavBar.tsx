@@ -1,19 +1,28 @@
 /**@jsxImportSource @emotion/react */
-import React from "react";
+import React, { useEffect } from "react";
+import { History } from "history";
 import { css } from "@emotion/react";
 import tw from "twin.macro";
+import { withRouter } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { loginState, usernameState } from "../../atoms/userAtoms";
 import { Link } from "react-router-dom";
 import { ContainerSC, NavLinkSC, nav_link } from "./NavBar.styles";
+import AuthService from "../Login/AuthService";
 
-function LoginObserver() {
-  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
-  const username = useRecoilValue(usernameState);
+const NavBar: React.FC<{ history: History }> = ({ history }) => {
+  const [username, setUsername] = useRecoilState(usernameState);
+
+  useEffect(() => {
+    if (AuthService.isAuthenticated()) {
+      setUsername(sessionStorage.getItem("username") as string);
+    }
+  }, []);
 
   function handleLogout() {
-    if (loggedIn) {
-      setLoggedIn(false);
+    if (AuthService.isAuthenticated()) {
+      AuthService.logout();
+      history.push("/");
     }
   }
   return (
@@ -23,7 +32,7 @@ function LoginObserver() {
         <Link to="/">
           <NavLinkSC>Home</NavLinkSC>
         </Link>
-        {loggedIn ? (
+        {AuthService.isAuthenticated() ? (
           <>
             <Link css={[nav_link]} to={`/todo/${username}`}>
               To Do List
@@ -33,10 +42,10 @@ function LoginObserver() {
             </Link>
           </>
         ) : null}
-        <button onClick={handleLogout}>{loggedIn ? "Logout" : <Link to="/">Login</Link>}</button>
+        <button onClick={handleLogout}>{AuthService.isAuthenticated() ? "Logout" : <Link to="/">Login</Link>}</button>
       </ContainerSC>
     </nav>
   );
-}
+};
 
-export default LoginObserver;
+export default withRouter(NavBar);
