@@ -2,26 +2,40 @@
 import React from "react";
 import { css } from "@emotion/react";
 import tw from "twin.macro";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { loginState, usernameState } from "../../atoms/userAtoms";
 import { Link } from "react-router-dom";
-import { Container, NavLink } from "./NavBar.styles";
+import { ContainerSC, NavLinkSC, nav_link } from "./NavBar.styles";
 
 function LoginObserver() {
-  const loggedIn = useRecoilValue(loginState);
+  const [loggedIn, setLoggedIn] = useRecoilState(loginState);
   const username = useRecoilValue(usernameState);
+
+  function handleLogout() {
+    if (loggedIn) {
+      setLoggedIn(false);
+    }
+  }
   return (
-    <div>
-      <Container>
+    <nav>
+      <ContainerSC>
+        <h1>Nav Container</h1>
         <Link to="/">
-          <NavLink>Home</NavLink>
+          <NavLinkSC>Home</NavLinkSC>
         </Link>
-        <Link to={`/todo/${username}`}>
-          <NavLink>To Do List</NavLink>
-        </Link>
-        <Link to="/anotherComp">Another Component</Link>
-      </Container>
-    </div>
+        {loggedIn ? (
+          <>
+            <Link css={[nav_link]} to={`/todo/${username}`}>
+              To Do List
+            </Link>
+            <Link tw="bg-blue-300" to="/anotherComp">
+              Another Component
+            </Link>
+          </>
+        ) : null}
+        <button onClick={handleLogout}>{loggedIn ? "Logout" : <Link to="/">Login</Link>}</button>
+      </ContainerSC>
+    </nav>
   );
 }
 
