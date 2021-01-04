@@ -33,13 +33,12 @@ const Login: React.FC<{ history: History }> = ({ history }) => {
     // hard coded validation
     if (username === "Logan" && password === "password") {
       AuthService.registerSuccessfulLogin(username);
-      setLoggedIn(true);
-
       // NOTE: if no setTimeout, recoil state is not updated quickly enough
       // and component will only see previous state
-      setTimeout(() => {
-        history.push(`/todo/${username}`); // to use, import withRouter from 'react-router-dom' and export default withRouter(component)
-      }, 0);
+      // NOTE: registering login with sessionStorage results in immediate transition and auth confirmation
+      // setTimeout(() => {
+      history.push(`/todo/${username}`); // to use, import withRouter from 'react-router-dom' and export default withRouter(component)
+      // }, 0);
     } else {
       setLoggedIn(false);
       setLoginError(true);

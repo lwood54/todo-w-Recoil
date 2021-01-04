@@ -23,7 +23,7 @@ function ToDoList() {
   ]);
   const todoList = toDos.map((todo) => {
     return (
-      <li>
+      <li key={todo.id}>
         {todo.id} - {todo.description} - {todo.done.toString()} - {todo.targetDate.toString()}
       </li>
     );

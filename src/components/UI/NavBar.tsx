@@ -32,7 +32,7 @@ const NavBar: React.FC<{ history: History }> = ({ history }) => {
         <Link to="/">
           <NavLinkSC>Home</NavLinkSC>
         </Link>
-        {AuthService.isAuthenticated() ? (
+        {AuthService.isAuthenticated() && (
           <>
             <Link css={[nav_link]} to={`/todo/${username}`}>
               To Do List
@@ -41,7 +41,7 @@ const NavBar: React.FC<{ history: History }> = ({ history }) => {
               Another Component
             </Link>
           </>
-        ) : null}
+        )}
         <button onClick={handleLogout}>{AuthService.isAuthenticated() ? "Logout" : <Link to="/">Login</Link>}</button>
       </ContainerSC>
     </nav>
