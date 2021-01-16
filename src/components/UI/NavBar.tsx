@@ -36,7 +36,7 @@ const NavBar: React.FC<{ history: History }> = ({ history }) => {
               <NavLinkSC>To Do List</NavLinkSC>
             </Link>
             <Link tw="bg-blue-300" to="/anotherComp">
-              <NavLinkSC>Another Component</NavLinkSC>
+              <NavLinkSC>A Different Component</NavLinkSC>
             </Link>
           </>
         )}
